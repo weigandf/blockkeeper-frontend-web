@@ -1,4 +1,4 @@
-import {ApiBase} from './Lib'
+import { ApiBase } from './Lib'
 import __ from '../util'
 
 export default class Addr extends ApiBase {
@@ -29,7 +29,7 @@ export default class Addr extends ApiBase {
   }
 
   async _apiGet () {
-    const pld = await this.rqst({url: `address/${this._id}`})
+    const pld = await this.rqst({ url: `address/${this._id}` })
     const addr = await this.decrypt(pld.data)
     addr.tscs = []
     for (let tscPld of pld.tscs) addr.tscs.push(await this.decrypt(tscPld))
@@ -87,7 +87,7 @@ export default class Addr extends ApiBase {
           chg: [...tsc.hd.snd.addrHshs.chg, ...tsc.hd.rcv.addrHshs.chg]
         }
       } else {
-        tsc.hd.addrHshs = {ext: [], chg: []}
+        tsc.hd.addrHshs = { ext: [], chg: [] }
       }
     }
     if (upd.std || cur.std) tsc.std = upd.std || cur.std
@@ -115,22 +115,27 @@ export default class Addr extends ApiBase {
     const coinObj = this.coinObjs[addr.coin]
     const bxp = upd.bxp || cur.bxp
     if (bxp) addr.bxp = bxp
-    const hsh = upd.hsh || cur.hsh
+    let hsh = upd.hsh || cur.hsh
     if (hsh) {
-      addr.hsh = coinObj.toAddrHsh(hsh)
-      addr.type = coinObj.isHdAddr(addr.hsh) ? 'hd' : 'std'
+      hsh = coinObj.toAddrHsh(hsh)
+      addr.type = coinObj.isHdAddr(hsh) ? 'hd' : 'std'
+      if (addr.type === 'hd') {
+        if (!cur.hd) cur.hd = {}
+        if (!upd.hd) upd.hd = {}
+        addr.hd = {
+          basePath: upd.hd.basePath || cur.hd.basePath,
+          baseAbsPath: upd.hd.baseAbsPath || cur.hd.baseAbsPath
+        }
+        const hshs = coinObj.toHdAddrHshs(hsh)
+        addr.hsh = hshs[0]
+        if (addr.hsh !== hshs[1]) addr.hd.hsh = hshs[1]
+      } else {
+        addr.hsh = hsh
+      }
       addr.name = addr.name ||
-                  `${__.cfg('newAddrNotice')} ${__.shortn(hsh, 5).trim()}`
+        `${__.cfg('newAddrNotice')} ${__.shortn(addr.hsh, 5).trim()}`
     } else {
       addr.type = 'man'
-    }
-    if (addr.type === 'hd') {
-      if (!cur.hd) cur.hd = {}
-      if (!upd.hd) upd.hd = {}
-      addr.hd = {
-        basePath: upd.hd.basePath || cur.hd.basePath,
-        baseAbsPath: upd.hd.baseAbsPath || cur.hd.baseAbsPath
-      }
     }
     upd.tscs = upd.tscs || {}
     const tscs = new Map()
@@ -144,7 +149,7 @@ export default class Addr extends ApiBase {
       tsc = this._toTsc(tsc)
       tscs.set(tsc.hsh, tsc)
     }
-    addr.tscs = __.struc(tscs, {byTme: true, max: __.cfg('maxTscCnt')})
+    addr.tscs = __.struc(tscs, { byTme: true, max: __.cfg('maxTscCnt') })
     return addr
   }
 

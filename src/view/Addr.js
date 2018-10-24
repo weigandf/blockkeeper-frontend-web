@@ -258,8 +258,7 @@ class AddrView extends React.Component {
                     className={this.props.classes.display3}
                   >
                     <TransitiveNumber>
-                      {__.formatNumber(
-                        this.state.blc1, this.state.coin, this.user.locale)}
+                      {this.state.blc1}
                     </TransitiveNumber>&nbsp;
                     <CoinIcon
                       coin={this.state.coin}
@@ -278,7 +277,7 @@ class AddrView extends React.Component {
                     gutterBottom
                   >
                     {__.formatNumber(
-                      this.state.blc2, this.state.coin0, this.user.locale)}
+                      this.state.blc2, this.state.coin0, this.user.locale, true)}
                     &nbsp;
                     <CoinIcon
                       coin={this.state.coin0}
@@ -294,7 +293,7 @@ class AddrView extends React.Component {
                     gutterBottom
                   >
                     {__.formatNumber(
-                      this.state.blc3, this.state.coin1, this.user.locale)}
+                      this.state.blc3, this.state.coin1, this.user.locale, true)}
                     <CoinIcon
                       coin={this.state.coin1}
                       color={theme.palette.primary['500']}
@@ -367,11 +366,7 @@ class AddrView extends React.Component {
                                 }
                                 {!this.state.edit &&
                                   <span>
-                                    {__.formatNumber(
-                                      this.state.blc1,
-                                      this.state.coin,
-                                      this.user.locale
-                                    )}
+                                    {this.state.blc1}
                                     &nbsp; {this.state.coin.toUpperCase()}
                                   </span>
                                 }
@@ -385,7 +380,7 @@ class AddrView extends React.Component {
                             <TableCell numeric padding='none'>
                               {this.state.addr.type === 'hd' &&
                                 <span>
-                                  HD wallet (xpub key)
+                                  HD wallet
                                 </span>
                               }
                               {this.state.addr.type === 'std' &&
@@ -516,7 +511,7 @@ class AddrView extends React.Component {
                         }}
                         className={this.props.classes.unvlBtn}
                       >
-                        Unveil xpub key
+                        Unveil HD wallet key
                       </Button>
                     }
                     {this.state.edit &&

@@ -177,7 +177,10 @@ theme.overrides = {
   },
   MuiTab: {
     root: {
-      fontWeight: 'bold'
+      fontWeight: 'bold',
+      [theme.breakpoints.only('xs')]: {
+        fontSize: '14px'
+      }
     }
   },
   MuiTabScrollButton: {
@@ -210,8 +213,9 @@ const depotHoldings = {
 const depotDoughnut = {
   position: 'relative',
   margin: 'auto',
-  height: styleGuide.depotStepperHeight, // cant use minHeight cause of chartjs bug
   width: '100%',
+  height: styleGuide.depotStepperHeight,
+  overflow: 'hidden',
   [theme.breakpoints.only('sm')]: {
     width: '50%'
   },
@@ -432,7 +436,10 @@ const topBarSpacer = {
 }
 
 const areaWrap = {
-  height: 350
+  height: 350,
+  [theme.breakpoints.only('xs')]: {
+    overflowX: 'hidden' // fix small screens
+  }
 }
 
 export {

@@ -7,7 +7,7 @@
     "react-json-view": "^1.19.1"
   },
   "dependencies": {
-    "@material-ui/core": "1.0.0",
+    "@material-ui/core": "3.1.0",
     "@material-ui/icons": "1.0.0",
     "@quentin-sommer/react-useragent": "1.2.5",
     "@vx/curve": "^0.0.165",
@@ -30,7 +30,6 @@
     "browser-locale": "^1.0.3",
     "case-sensitive-paths-webpack-plugin": "2.1.2",
     "chalk": "2.4.1",
-    "chart.js": "^2.7.2",
     "coininfo": "^4.3.0",
     "create-react-class": "^15.6.3",
     "css-loader": "0.28.11",
@@ -58,7 +57,6 @@
     "qrcode-react": "^0.1.16",
     "raf": "3.4.0",
     "react": "^16.4.0",
-    "react-chartjs-2": "^2.7.2",
     "react-copy-to-clipboard": "^5.0.1",
     "react-cryptocoins": "^1.0.11",
     "react-dev-utils": "^5.0.1",
