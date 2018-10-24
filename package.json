@@ -17,6 +17,7 @@
     "@vx/scale": "^0.0.165",
     "@vx/shape": "0.0.171",
     "@vx/tooltip": "^0.0.165",
+    "abi-decoder": "^1.2.0",
     "autoprefixer": "8.5.0",
     "axios": "0.18.0",
     "babel-core": "6.26.3",
@@ -72,6 +73,7 @@
     "url-loader": "1.0.1",
     "uuid": "^3.2.1",
     "validator": "^10.2.0",
+    "web3": "^1.0.0-beta.36",
     "web3-utils": "^1.0.0-beta.34",
     "webpack": "3.8.1",
     "webpack-dev-server": "2.9.4",
@@ -82,7 +84,8 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js --env=jsdom"
+    "test": "node scripts/test.js --env=jsdom",
+    "web3Test": "node ./src/web3Test.js"
   },
   "jest": {
     "collectCoverageFrom": [
