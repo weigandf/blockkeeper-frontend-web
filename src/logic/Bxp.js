@@ -1,6 +1,8 @@
 import * as mo from 'moment'
 import { Bip44 } from './Bip'
 import __ from '../util'
+import erc20SummarLogicAbi from '../abis/AbiErc20SummaryLogic.json'
+
 
 class Base {
   constructor (name, pa) {
@@ -29,6 +31,57 @@ class Bxp extends Base {
       await __.sleep(sec * 1000)
     }
     return nxSec
+  }
+}
+
+class Infura extends Bxp {
+  constructor (pa) {
+    super('infura', pa)
+    this._toTscs = this._toTscs.bind(this)
+    this._toTxs = this._toTxs.bind(this)
+    this.processStdAddrs = this.processStdAddrs.bind(this)
+    this.web3 = new Web3(new Web3.providers.HttpProvider(__.cfg('bxp').infura.url))
+  }
+
+  async rqst (address) {
+    let logic = await new this.web3.eth.Contract(erc20SummarLogicAbi, __.cfg('bxp').infura.smartContractAddress)
+    return await logic.methods.erc20BalanceForAddress(address).call()
+  }
+
+  async processStdAddrs (addrs, sleepSec) {
+    const updStdAddrs = {}
+
+    for (let addr of Object.values(addrs)) {
+      await this.sleep(sleepSec)
+      sleepSec = __.cfg('bxp').infura.sleepSec
+      let addrHsh = addr.address
+      this.debug(`Requesting this web3 addrs: ${addrHsh}`)
+      let pld = await this.rqst(addrHsh)
+      this.debug('Request returned payload:', pld)
+
+      let updAddrs = {}
+      
+      if (!addrHsh) continue
+      let updAddr = updAddrs[this.coinObj.toAddrHsh(addrHsh)]
+      if (!updAddr) continue
+
+      for (i = 0; i < pld['0'].length; i++) { 
+        const coinObj = getCoinObjForAddress(result['0'][i]);
+        let float = '0.0';
+        if(pld['1'][i] > 0) {
+          float = pld['1'][i].substr(0, pld['1'][i].length - pld['2'][i]) + '.' + pld['1'][i].substr(pld['1'][i].length - pld['2'][i]);
+        }
+
+        Object.assign(updAddr, {
+          bxp: 'infura',
+          // total satoshi blc (confirmed/unconfirmed tscs) for this addr
+          amnt: coinObj.conv(addr.final_balance)
+        })
+      }
+      // TODO: Object.assign(updStdAddrs, updAddrs)
+    }
+    this.debug('Fetching web3 addrs finished:', updStdAddrs)
+    return Object.values(updStdAddrs)
   }
 }
 

@@ -147,6 +147,11 @@ Object.assign(d, {
       maxAddrCnt: d.isDev ? 30 : 200,
       maxTscCnt: d.isDev ? 10 : 100 // return tscs of _all_ requested addrs
       // ----------------------------------------------------------------
+    },
+    infura: {
+      sleepSec: 1,
+      url: 'https://mainnet.infura.io/',
+      smartContractAddress: '0x000003Ed2eB44CdeD8AdE31c01dda60dA466b2D1'
     }
   }
 })
